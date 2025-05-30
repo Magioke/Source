@@ -1,132 +1,73 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Magioke Karaoke</title>
+  <title>Magioke Menu</title>
   <style>
     body {
       margin: 0;
-      overflow: hidden;
-      background: black;
-      color: white;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff69b4, #8a2be2);
       font-family: Arial, sans-serif;
-    }
-    video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -1;
-    }
-    #overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      pointer-events: none;
-      user-select: none;
+      align-items: center;
+      overflow: hidden;
     }
-    #title {
-      font-size: 60px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 3px 3px 0 black, -3px -3px 0 black;
-      margin-bottom: 70px;
-    }
-    #logo {
-      width: 150px;
-      user-select: none;
-      pointer-events: none;
-      margin-top: -20px;
-    }
-    #numberDisplay {
-      position: absolute;
-      bottom: 120px;
+
+    .logo {
+      position: fixed;
+      top: 30px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 64px;
-      font-weight: bold;
-      color: white;
-      text-shadow: 3px 3px 0 black, -3px -3px 0 black;
-      user-select: none;
+      width: 220px;
       pointer-events: none;
+      user-select: none;
     }
-    #startButton {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 40px;
-      padding: 20px 40px;
-      background: #333;
-      color: white;
+
+    .menu {
+      background: white;
+      padding: 40px 60px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .menu h1 {
+      margin: 0 0 20px;
+      font-size: 36px;
+      color: #333;
+    }
+
+    .menu button {
+      display: block;
+      width: 220px;
+      margin: 15px auto;
+      padding: 18px 0;
+      font-size: 20px;
       border: none;
       border-radius: 12px;
-      z-index: 2;
+      background: #8a2be2;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .menu button:hover {
+      background: #6a1fb5;
     }
   </style>
 </head>
 <body>
 
-<video id="bgVideo" autoplay muted loop playsinline>
-  <source src="https://magioke.github.io/Source/BACKGROUND/Magioke_video_1.mp4" type="video/mp4">
-</video>
+<img class="logo" src="https://magioke.github.io/Source/LOGO/texticon_1.png" alt="Magioke Logo">
 
-<div id="overlay">
-  <div id="title">PICK A SONG</div>
-  <img id="logo" src="https://magioke.github.io/Source/LOGO/icon_1.png">
+<div class="menu">
+  <h1>Select Mode</h1>
+  <button onclick="window.location.href='https://magioke.github.io/Source/fa7d9e2c-3c1fadb2-bce4fde9-cafe8abe-dc3defab/high_graphics.html'">HIGH GRAPHICS</button>
+  <button onclick="window.location.href='https://magioke.github.io/Source/fa7d9e2c-3c1fadb2-bce4fde9-cafe8abe-dc3defab/low_graphics.html'">LOW GRAPHICS</button>
 </div>
-
-<div id="numberDisplay"></div>
-<button id="startButton">START</button>
-
-<script>
-  let numberInput = '';
-  const numberDisplay = document.getElementById('numberDisplay');
-  const sfx = {};
-  let audioUnlocked = false;
-
-  for (let i = 0; i <= 9; i++) {
-    sfx[i] = new Audio(`https://magioke.github.io/Source/sfx/${i}_magioke.mp3`);
-  }
-
-  function unlockAudioAndVideo() {
-    for (let i = 0; i <= 9; i++) {
-      sfx[i].play().then(() => {
-        sfx[i].pause();
-        sfx[i].currentTime = 0;
-      }).catch(()=>{});
-    }
-    audioUnlocked = true;
-    document.getElementById('startButton').style.display = 'none';
-  }
-
-  document.getElementById('startButton').addEventListener('click', unlockAudioAndVideo);
-
-  document.addEventListener('keydown', function(e) {
-    if (!audioUnlocked) return; // ignore typing before start
-
-    if (e.key >= '0' && e.key <= '9') {
-      if (sfx[e.key]) {
-        sfx[e.key].currentTime = 0;
-        sfx[e.key].play();
-      }
-      if (numberInput.length < 5) {
-        numberInput += e.key;
-      } else {
-        numberInput = numberInput.slice(1) + e.key;
-      }
-      numberDisplay.textContent = numberInput;
-    }
-  });
-</script>
 
 </body>
 </html>
