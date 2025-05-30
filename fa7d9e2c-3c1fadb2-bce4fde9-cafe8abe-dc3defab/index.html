@@ -58,11 +58,24 @@
       user-select: none;
       pointer-events: none;
     }
+    #startButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 40px;
+      padding: 20px 40px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      z-index: 2;
+    }
   </style>
 </head>
 <body>
 
-<video autoplay muted loop playsinline>
+<video id="bgVideo" autoplay muted loop playsinline>
   <source src="https://magioke.github.io/Source/BACKGROUND/Magioke_video_1.mp4" type="video/mp4">
 </video>
 
@@ -72,39 +85,38 @@
 </div>
 
 <div id="numberDisplay"></div>
+<button id="startButton">START</button>
 
 <script>
   let numberInput = '';
   const numberDisplay = document.getElementById('numberDisplay');
   const sfx = {};
+  let audioUnlocked = false;
 
-  // preload sfx as Audio objects
   for (let i = 0; i <= 9; i++) {
     sfx[i] = new Audio(`https://magioke.github.io/Source/sfx/${i}_magioke.mp3`);
   }
 
-  let audioUnlocked = false;
-
-  function unlockAudio() {
-    if (!audioUnlocked) {
-      sfx[0].play().then(() => {
-        sfx[0].pause();
-        sfx[0].currentTime = 0;
-        audioUnlocked = true;
-      }).catch(() => {
-        // some TVs won't allow it, skip unlocking
-      });
+  function unlockAudioAndVideo() {
+    for (let i = 0; i <= 9; i++) {
+      sfx[i].play().then(() => {
+        sfx[i].pause();
+        sfx[i].currentTime = 0;
+      }).catch(()=>{});
     }
+    audioUnlocked = true;
+    document.getElementById('startButton').style.display = 'none';
   }
 
+  document.getElementById('startButton').addEventListener('click', unlockAudioAndVideo);
+
   document.addEventListener('keydown', function(e) {
+    if (!audioUnlocked) return; // ignore typing before start
+
     if (e.key >= '0' && e.key <= '9') {
-      unlockAudio();
-      if (audioUnlocked) {
-        if (sfx[e.key]) {
-          sfx[e.key].currentTime = 0;
-          sfx[e.key].play();
-        }
+      if (sfx[e.key]) {
+        sfx[e.key].currentTime = 0;
+        sfx[e.key].play();
       }
       if (numberInput.length < 5) {
         numberInput += e.key;
