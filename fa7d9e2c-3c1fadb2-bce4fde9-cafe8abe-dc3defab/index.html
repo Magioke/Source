@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Magioke</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    video#backgroundVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      z-index: -1;
+      object-fit: cover;
+    }
+
+    .logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .logo img {
+      max-width: 150px;
+      width: 10vw;
+      height: auto;
+      display: block;
+      pointer-events: none;
+      user-drag: none;
+      -webkit-user-drag: none;
+    }
+
+    .title {
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: 64px;
+      color: white;
+      -webkit-text-stroke: 3px black;
+      text-stroke: 3px black;
+      margin-bottom: 50px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .number-display {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      font-size: 64px;
+      color: white;
+      -webkit-text-stroke: 3px black;
+      text-stroke: 3px black;
+      z-index: 2;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+  </style>
+</head>
+<body oncontextmenu="return false">
+
+<video id="backgroundVideo" autoplay muted loop playsinline>
+  <source src="https://magioke.github.io/Source/BACKGROUND/Magioke_video_1.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<div class="logo">
+  <div class="title">PICK A SONG</div>
+  <img src="https://magioke.github.io/Source/LOGO/icon_1.png" alt="Magioke Logo">
+</div>
+
+<div class="number-display" id="numberDisplay"></div>
+
+<script>
+  let numberDisplay = document.getElementById('numberDisplay');
+  let enteredNumbers = '';
+
+  document.addEventListener('keydown', function(event) {
+    if (event.key >= '0' && event.key <= '9') {
+      if (enteredNumbers.length < 5) {
+        enteredNumbers += event.key;
+      } else {
+        // Rolling 5-number display: shift left, add new number
+        enteredNumbers = enteredNumbers.slice(1) + event.key;
+      }
+      numberDisplay.textContent = enteredNumbers;
+    } else if (event.key === 'Backspace') {
+      enteredNumbers = enteredNumbers.slice(0, -1);
+      numberDisplay.textContent = enteredNumbers;
+    } else if (event.key === 'Enter') {
+      enteredNumbers = '';
+      numberDisplay.textContent = '';
+    }
+  });
+
+  // Disable drag for all images
+  document.querySelectorAll('img').forEach(img => {
+    img.addEventListener('dragstart', e => e.preventDefault());
+  });
+</script>
+
+</body>
+</html>
