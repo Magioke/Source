@@ -73,27 +73,39 @@
 
 <div id="numberDisplay"></div>
 
-<!-- preload sfx audio elements -->
-<div id="sfx" style="display:none;">
-  <audio id="sfx0" src="https://magioke.github.io/Source/sfx/0_magioke.mp3"></audio>
-  <audio id="sfx1" src="https://magioke.github.io/Source/sfx/1_magioke.mp3"></audio>
-  <audio id="sfx2" src="https://magioke.github.io/Source/sfx/2_magioke.mp3"></audio>
-  <audio id="sfx3" src="https://magioke.github.io/Source/sfx/3_magioke.mp3"></audio>
-  <audio id="sfx4" src="https://magioke.github.io/Source/sfx/4_magioke.mp3"></audio>
-  <audio id="sfx5" src="https://magioke.github.io/Source/sfx/5_magioke.mp3"></audio>
-  <audio id="sfx6" src="https://magioke.github.io/Source/sfx/6_magioke.mp3"></audio>
-  <audio id="sfx7" src="https://magioke.github.io/Source/sfx/7_magioke.mp3"></audio>
-  <audio id="sfx8" src="https://magioke.github.io/Source/sfx/8_magioke.mp3"></audio>
-  <audio id="sfx9" src="https://magioke.github.io/Source/sfx/9_magioke.mp3"></audio>
-</div>
-
 <script>
   let numberInput = '';
   const numberDisplay = document.getElementById('numberDisplay');
+  const sfx = {};
+
+  // preload sfx as Audio objects
+  for (let i = 0; i <= 9; i++) {
+    sfx[i] = new Audio(`https://magioke.github.io/Source/sfx/${i}_magioke.mp3`);
+  }
+
+  let audioUnlocked = false;
+
+  function unlockAudio() {
+    if (!audioUnlocked) {
+      sfx[0].play().then(() => {
+        sfx[0].pause();
+        sfx[0].currentTime = 0;
+        audioUnlocked = true;
+      }).catch(() => {
+        // some TVs won't allow it, skip unlocking
+      });
+    }
+  }
 
   document.addEventListener('keydown', function(e) {
     if (e.key >= '0' && e.key <= '9') {
-      playSound(e.key);
+      unlockAudio();
+      if (audioUnlocked) {
+        if (sfx[e.key]) {
+          sfx[e.key].currentTime = 0;
+          sfx[e.key].play();
+        }
+      }
       if (numberInput.length < 5) {
         numberInput += e.key;
       } else {
@@ -102,21 +114,6 @@
       numberDisplay.textContent = numberInput;
     }
   });
-
-  function playSound(num) {
-    const sfx = document.getElementById('sfx' + num);
-    if (sfx) {
-      sfx.currentTime = 0;
-      sfx.play();
-    }
-  }
-
-  // unlock audio context on first interaction for Android TV / Smart TVs
-  document.addEventListener('click', () => {
-    const sfx = document.getElementById('sfx0');
-    sfx.play().then(() => sfx.pause());
-  }, { once: true });
-
 </script>
 
 </body>
