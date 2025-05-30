@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Magioke Karaoke</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+    }
+    #title {
+      font-size: 60px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 3px 3px 0 black, -3px -3px 0 black;
+      margin-bottom: 70px;
+    }
+    #logo {
+      width: 150px;
+      user-select: none;
+      pointer-events: none;
+      margin-top: -20px;
+    }
+    #numberDisplay {
+      position: absolute;
+      bottom: 120px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 64px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 3px 3px 0 black, -3px -3px 0 black;
+      user-select: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<video autoplay muted loop playsinline>
+  <source src="https://magioke.github.io/Source/BACKGROUND/Magioke_video_1.mp4" type="video/mp4">
+</video>
+
+<div id="overlay">
+  <div id="title">PICK A SONG</div>
+  <img id="logo" src="https://magioke.github.io/Source/LOGO/icon_1.png">
+</div>
+
+<div id="numberDisplay"></div>
+
+<!-- preload sfx audio elements -->
+<div id="sfx" style="display:none;">
+  <audio id="sfx0" src="https://magioke.github.io/Source/sfx/0_magioke.mp3"></audio>
+  <audio id="sfx1" src="https://magioke.github.io/Source/sfx/1_magioke.mp3"></audio>
+  <audio id="sfx2" src="https://magioke.github.io/Source/sfx/2_magioke.mp3"></audio>
+  <audio id="sfx3" src="https://magioke.github.io/Source/sfx/3_magioke.mp3"></audio>
+  <audio id="sfx4" src="https://magioke.github.io/Source/sfx/4_magioke.mp3"></audio>
+  <audio id="sfx5" src="https://magioke.github.io/Source/sfx/5_magioke.mp3"></audio>
+  <audio id="sfx6" src="https://magioke.github.io/Source/sfx/6_magioke.mp3"></audio>
+  <audio id="sfx7" src="https://magioke.github.io/Source/sfx/7_magioke.mp3"></audio>
+  <audio id="sfx8" src="https://magioke.github.io/Source/sfx/8_magioke.mp3"></audio>
+  <audio id="sfx9" src="https://magioke.github.io/Source/sfx/9_magioke.mp3"></audio>
+</div>
+
+<script>
+  let numberInput = '';
+  const numberDisplay = document.getElementById('numberDisplay');
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key >= '0' && e.key <= '9') {
+      playSound(e.key);
+      if (numberInput.length < 5) {
+        numberInput += e.key;
+      } else {
+        numberInput = numberInput.slice(1) + e.key;
+      }
+      numberDisplay.textContent = numberInput;
+    }
+  });
+
+  function playSound(num) {
+    const sfx = document.getElementById('sfx' + num);
+    if (sfx) {
+      sfx.currentTime = 0;
+      sfx.play();
+    }
+  }
+
+  // unlock audio context on first interaction for Android TV / Smart TVs
+  document.addEventListener('click', () => {
+    const sfx = document.getElementById('sfx0');
+    sfx.play().then(() => sfx.pause());
+  }, { once: true });
+
+</script>
+
+</body>
+</html>
