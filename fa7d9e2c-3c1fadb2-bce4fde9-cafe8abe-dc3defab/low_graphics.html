@@ -50,7 +50,7 @@
     <button class="close-btn" id="closeSongPlayer" title="Close">&times;</button>
     <video id="songPlayerVideo" tabindex="0" autoplay playsinline></video>
     <div id="videoInstructions" style="position:absolute;left:0;right:0;bottom:7vh;text-align:center;color:#fff;font-family:sans-serif;font-size:2vw;z-index:5;pointer-events:none;">
-      <span>Press <b>OK</b>/<b>Enter</b> to Play/Pause. Press <b>Esc</b> or <b>Back</b> to Exit. <br>Click anywhere to Play/Pause.</span>
+      <span>Press <b>OK</b>/<b>Enter</b> to Play/Pause. Press <b>Esc</b>, <b>Back</b>, or <b>Down</b> to Exit.<br>Click anywhere to Play/Pause.</span>
     </div>
   </div>
   <script>
@@ -162,7 +162,15 @@
           }
           e.preventDefault();
         }
-        if (e.key === "Escape" || e.key === "Backspace" || e.key === "SoftLeft" || e.key === "SoftRight" || e.key === "Back") {
+        // ESC, Back, Down Arrow all close player
+        if (
+          e.key === "Escape" ||
+          e.key === "Backspace" ||
+          e.key === "SoftLeft" ||
+          e.key === "SoftRight" ||
+          e.key === "Back" ||
+          e.key === "ArrowDown"
+        ) {
           closeSongPlayer();
           e.preventDefault();
         }
