@@ -23,7 +23,6 @@
     #songPlayerOverlay video { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; object-fit: contain; border-radius: 0; background: #000; outline: none; }
     #songPlayerOverlay .close-btn { position: absolute; top: 3vw; right: 5vw; font-size: 3vw; color: #fff; background: #000a; border: none; border-radius: 50%; width: 4vw; height: 4vw; min-width: 35px; min-height: 35px; cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
     #songPlayerOverlay .close-btn:hover { background: #222; }
-    /* Hide default video controls and progress bar */
     #songPlayerVideo::-webkit-media-controls { display:none !important; }
     #songPlayerVideo::-webkit-media-controls-panel { display: none !important; }
     #songPlayerVideo::-webkit-media-controls-play-button,
@@ -35,9 +34,7 @@
     #songPlayerVideo::-webkit-media-controls-seek-forward-button,
     #songPlayerVideo::-webkit-media-controls-mute-button,
     #songPlayerVideo::-webkit-media-controls-volume-slider { display: none !important; }
-    /* For Firefox */
     #songPlayerVideo::-moz-media-controls { display: none !important; }
-    /* For Edge/IE */
     #songPlayerVideo::-ms-media-controls { display: none !important; }
   </style>
 </head>
@@ -53,7 +50,7 @@
     <button class="close-btn" id="closeSongPlayer" title="Close">&times;</button>
     <video id="songPlayerVideo" tabindex="0" autoplay playsinline></video>
     <div id="videoInstructions" style="position:absolute;left:0;right:0;bottom:7vh;text-align:center;color:#fff;font-family:sans-serif;font-size:2vw;z-index:5;pointer-events:none;">
-      <span>Press <b>Space</b>/<b>Play</b> to Play/Pause. Press <b>Esc</b> or <b>Back</b> to Exit.</span>
+      <span>Press <b>OK</b>/<b>Enter</b> to Play/Pause. Press <b>Esc</b> or <b>Back</b> to Exit.</span>
     </div>
   </div>
   <script>
@@ -100,7 +97,6 @@
       .then(r => r.json())
       .then(obj => {
         if (obj.song) {
-          // Parse: "00000 - LUPANG HINIRANG - https://magioke.github.io/songbundles/lupang_hinirang.mp4"
           const match = obj.song.match(/^(\d{5})\s*-\s*(.*?)\s*-\s*(https?:\/\/\S+)$/);
           if (match) {
             songNumber = match[1];
@@ -130,7 +126,6 @@
       const display = document.getElementById("number-entry");
       display.textContent = numbers.length ? numbers.join('') : '\u00A0';
       const selectText = document.getElementById("select-text");
-      // Only match if input is exactly 5 digits
       if (numbers.length === 5 && songLoaded) {
         const numStr = numbers.join('');
         if (numStr === songNumber) {
@@ -149,8 +144,7 @@
       const video = document.getElementById('songPlayerVideo');
       if (playerOverlay.style.display === "flex") {
         // Video overlay controls by keyboard/remote
-        if (e.key === " " || e.key === "Spacebar" || e.key === "Play" || e.key === "MediaPlayPause") {
-          // Play/Pause
+        if (e.key === "Enter" || e.key === "OK") {
           if (!video.paused) {
             video.pause();
           } else {
@@ -182,7 +176,6 @@
         e.preventDefault();
       }
       if ((e.key === "Enter" || e.key === "OK") && songLoaded) {
-        // Only play if all 5 digits match
         if (numbers.length === 5) {
           const numStr = numbers.join('');
           if (numStr === songNumber && songLink) {
