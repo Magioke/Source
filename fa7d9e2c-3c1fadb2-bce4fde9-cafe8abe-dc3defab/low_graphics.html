@@ -6,169 +6,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="icon" type="image/png" href="https://magioke.github.io/Source/LOGO/icon_2.png">
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: black;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .slideshow-bg {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: 1;
-      object-fit: cover;
-      pointer-events: none;
-      background: black;
-      opacity: 0;
-      transition: opacity 1.5s cubic-bezier(.4,0,.2,1);
-      /* Longer and smoother transition */
-      will-change: opacity;
-    }
-    .slideshow-bg.active {
-      opacity: 1;
-      z-index: 2;
-    }
-    .slideshow-bg.inactive {
-      opacity: 0;
-      z-index: 1;
-    }
-    .overlay {
-      z-index: 3;
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      pointer-events: none;
-      padding-top: 13vh;
-    }
-    .select-text {
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 6vw;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 4vw;
-      text-shadow:
-        -3px -3px 0 #000,
-         3px -3px 0 #000,
-        -3px  3px 0 #000,
-         3px  3px 0 #000,
-         0px  3px 0 #000,
-         3px  0px 0 #000,
-         0px -3px 0 #000,
-        -3px  0px 0 #000;
-      letter-spacing: 4px;
-      animation: selectFlash 1.2s steps(1, start) infinite;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    @keyframes selectFlash {
-      0%   { opacity: 1; }
-      39%  { opacity: 1; }
-      40%  { opacity: 0; }
-      89%  { opacity: 0; }
-      90%  { opacity: 1; }
-      100% { opacity: 1; }
-    }
-    .logo-img {
-      width: 15vw;
-      max-width: 180px;
-      min-width: 70px;
-      height: auto;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.7));
-      pointer-events: auto;
-      margin-bottom: 6vw;
-      margin-top: 2vw;
-      -webkit-user-drag: none;
-      user-drag: none;
-    }
-    .number-entry {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 5vw;
-      color: #fff;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 3vw;
-      letter-spacing: 0.35vw;
-      text-shadow:
-        -3px -3px 0 #000,
-         3px -3px 0 #000,
-        -3px  3px 0 #000,
-         3px  3px 0 #000,
-         0px  3px 0 #000,
-         3px  0px 0 #000,
-         0px -3px 0 #000,
-        -3px  0px 0 #000;
-      pointer-events: auto;
-      min-width: 14vw;
-      min-height: 2em;
-      background: none;
-      border: none;
-      box-shadow: none;
-      outline: none;
-      padding: 0;
-      -webkit-user-select: none;
-      user-select: none;
-      touch-action: manipulation;
-    }
-    @media (max-width: 900px) {
-      .select-text {
-        font-size: 10vw;
-        letter-spacing: 2px;
-        margin-bottom: 8vw;
-      }
-      .logo-img {
-        width: 30vw;
-        min-width: 50px;
-        margin-bottom: 10vw;
-        margin-top: 4vw;
-      }
-      .number-entry {
-        font-size: 10vw;
-        min-width: 30vw;
-        margin-top: 4vw;
-        letter-spacing: 0.6vw;
-      }
-      .overlay {
-        padding-top: 8vh;
-      }
-    }
-    ::-webkit-scrollbar {
-      width: 0 !important;
-      background: transparent !important;
-    }
-    body {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: black; touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    body { width: 100vw; height: 100vh; overflow: hidden; }
+    .slideshow-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1; object-fit: cover; pointer-events: none; background: black; opacity: 0; transition: opacity 1.5s cubic-bezier(.4,0,.2,1); will-change: opacity; }
+    .slideshow-bg.active { opacity: 1; z-index: 2; }
+    .slideshow-bg.inactive { opacity: 0; z-index: 1; }
+    .overlay { z-index: 3; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; pointer-events: none; padding-top: 13vh; }
+    .select-text { color: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 6vw; font-weight: bold; text-align: center; margin-bottom: 4vw; text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0px 3px 0 #000, 3px 0px 0 #000, 0px -3px 0 #000, -3px 0px 0 #000; letter-spacing: 4px; animation: selectFlash 1.2s steps(1, start) infinite; user-select: none; min-height: 1.5em; }
+    @keyframes selectFlash { 0% { opacity: 1; } 39% { opacity: 1; } 40% { opacity: 0; } 89% { opacity: 0; } 90% { opacity: 1; } 100% { opacity: 1; } }
+    .logo-img { width: 15vw; max-width: 180px; min-width: 70px; height: auto; display: block; margin-left: auto; margin-right: auto; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.7)); pointer-events: auto; margin-bottom: 6vw; margin-top: 2vw; -webkit-user-drag: none; user-drag: none; }
+    .number-entry { font-family: Arial, Helvetica, sans-serif; font-size: 5vw; color: #fff; font-weight: bold; text-align: center; margin-top: 3vw; letter-spacing: 0.35vw; text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0px 3px 0 #000, 3px 0px 0 #000, 0px -3px 0 #000, -3px 0px 0 #000; pointer-events: auto; min-width: 14vw; min-height: 2em; background: none; border: none; box-shadow: none; outline: none; padding: 0; user-select: none; touch-action: manipulation; }
+    @media (max-width: 900px) { .select-text { font-size: 10vw; letter-spacing: 2px; margin-bottom: 8vw; } .logo-img { width: 30vw; min-width: 50px; margin-bottom: 10vw; margin-top: 4vw; } .number-entry { font-size: 10vw; min-width: 30vw; margin-top: 4vw; letter-spacing: 0.6vw; } .overlay { padding-top: 8vh; } }
+    ::-webkit-scrollbar { width: 0 !important; background: transparent !important; }
+    body { scrollbar-width: none; -ms-overflow-style: none; }
+    #songPlayerOverlay { position: fixed; z-index: 1000; top: 0; left: 0; width: 100vw; height: 100vh; background: #000c; display: none; align-items: center; justify-content: center; }
+    #songPlayerOverlay video { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; object-fit: contain; border-radius: 0; background: #000; outline: none; }
+    #songPlayerOverlay .close-btn { position: absolute; top: 3vw; right: 5vw; font-size: 3vw; color: #fff; background: #000a; border: none; border-radius: 50%; width: 4vw; height: 4vw; min-width: 35px; min-height: 35px; cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    #songPlayerOverlay .close-btn:hover { background: #222; }
+    /* Hide default video controls and progress bar */
+    #songPlayerVideo::-webkit-media-controls { display:none !important; }
+    #songPlayerVideo::-webkit-media-controls-panel { display: none !important; }
+    #songPlayerVideo::-webkit-media-controls-play-button,
+    #songPlayerVideo::-webkit-media-controls-pause-button,
+    #songPlayerVideo::-webkit-media-controls-timeline,
+    #songPlayerVideo::-webkit-media-controls-current-time-display,
+    #songPlayerVideo::-webkit-media-controls-time-remaining-display,
+    #songPlayerVideo::-webkit-media-controls-seek-back-button,
+    #songPlayerVideo::-webkit-media-controls-seek-forward-button,
+    #songPlayerVideo::-webkit-media-controls-mute-button,
+    #songPlayerVideo::-webkit-media-controls-volume-slider { display: none !important; }
+    /* For Firefox */
+    #songPlayerVideo::-moz-media-controls { display: none !important; }
+    /* For Edge/IE */
+    #songPlayerVideo::-ms-media-controls { display: none !important; }
   </style>
 </head>
 <body tabindex="0">
-  <!-- Crossfade slideshow: two stacked images -->
   <img class="slideshow-bg active" id="slideshow-bg-1" src="https://magioke.github.io/Source/BACKGROUND/Magioke_1.jpg" alt="Background slideshow 1">
   <img class="slideshow-bg inactive" id="slideshow-bg-2" src="https://magioke.github.io/Source/BACKGROUND/Magioke_2.jpg" alt="Background slideshow 2">
   <div class="overlay">
-    <div class="select-text">SELECT A SONG</div>
+    <div class="select-text" id="select-text">SELECT A SONG</div>
     <img class="logo-img" src="https://magioke.github.io/Source/LOGO/icon_1.png" alt="Magioke Logo" draggable="false">
     <div class="number-entry" id="number-entry">&nbsp;</div>
   </div>
+  <div id="songPlayerOverlay">
+    <button class="close-btn" id="closeSongPlayer" title="Close">&times;</button>
+    <video id="songPlayerVideo" tabindex="0" autoplay playsinline></video>
+    <!-- controls attribute removed for custom control -->
+    <div id="videoInstructions" style="position:absolute;left:0;right:0;bottom:7vh;text-align:center;color:#fff;font-family:sans-serif;font-size:2vw;z-index:5;pointer-events:none;">
+      <span>Press <b>Space</b>/<b>Play</b> to Play/Pause. Press <b>Esc</b> or <b>Back</b> to Exit.</span>
+    </div>
+  </div>
   <script>
-    // Improved Crossfade slideshow logic
+    // Crossfade slideshow logic
     const imageCount = 10;
     const bg1 = document.getElementById('slideshow-bg-1');
     const bg2 = document.getElementById('slideshow-bg-2');
@@ -176,21 +66,16 @@
     let nextImage = 2;
     let showingFirst = true;
     let fadeTime = 1500, displayTime = 3500;
-
     function crossfadeSlides() {
       const fadeOutImg = showingFirst ? bg1 : bg2;
       const fadeInImg = showingFirst ? bg2 : bg1;
-      // Preload next image before fading in
       fadeInImg.src = `https://magioke.github.io/Source/BACKGROUND/Magioke_${nextImage}.jpg`;
       fadeInImg.onload = () => {
-        // Use class switching for smooth transition
         fadeInImg.classList.add('active');
         fadeInImg.classList.remove('inactive');
         fadeOutImg.classList.remove('active');
         fadeOutImg.classList.add('inactive');
-        // After transition, update state
         setTimeout(() => {
-          // z-index is managed by classes, but we ensure next fade is smooth
           fadeOutImg.style.zIndex = 1;
           fadeInImg.style.zIndex = 2;
         }, fadeTime);
@@ -201,14 +86,33 @@
     }
     setInterval(crossfadeSlides, displayTime);
 
-    // Focus for keyboard input on TV/PC, but don't interfere with TV remotes
     function focusBody() {
       try { document.body.focus(); } catch(e) {}
     }
     focusBody();
 
+    // Song data
+    let songNumber = "", songTitle = "", songLink = "";
     let numbers = [];
-    // Preload SFX for best TV/phone compatibility
+    let songLoaded = false;
+
+    // Fetch and parse the song
+    fetch('https://magioke.github.io/Source/fa7d9e2c-3c1fadb2-bce4fde9-cafe8abe-dc3defab/bundles/list.json')
+      .then(r => r.json())
+      .then(obj => {
+        if (obj.song) {
+          // Parse: "00000 - LUPANG HINIRANG - https://magioke.github.io/songbundles/lupang_hinirang.mp4"
+          const match = obj.song.match(/^(\d{5})\s*-\s*(.*?)\s*-\s*(https?:\/\/\S+)$/);
+          if (match) {
+            songNumber = match[1];
+            songTitle = match[2];
+            songLink = match[3];
+            songLoaded = true;
+          }
+        }
+      });
+
+    // SFX
     const sfxAudio = {};
     for (let i = 0; i <= 9; i++) {
       sfxAudio[i] = new Audio(`https://magioke.github.io/Source/sfx/${i}_magioke.mp3`);
@@ -222,12 +126,46 @@
         } catch(e){}
       }
     }
+
     function updateDisplay() {
       const display = document.getElementById("number-entry");
       display.textContent = numbers.length ? numbers.join('') : '\u00A0';
+      const selectText = document.getElementById("select-text");
+      // Only match if input is exactly 5 digits
+      if (numbers.length === 5 && songLoaded) {
+        const numStr = numbers.join('');
+        if (numStr === songNumber) {
+          selectText.textContent = songTitle;
+        } else {
+          selectText.textContent = "SONG NOT FOUND";
+        }
+      } else {
+        selectText.textContent = "SELECT A SONG";
+      }
     }
+
     document.addEventListener("keydown", (e) => {
       if (/^(INPUT|TEXTAREA)$/i.test(document.activeElement.tagName)) return;
+      const playerOverlay = document.getElementById('songPlayerOverlay');
+      const video = document.getElementById('songPlayerVideo');
+      if (playerOverlay.style.display === "flex") {
+        // Video overlay controls by keyboard/remote
+        if (e.key === " " || e.key === "Spacebar" || e.key === "Play" || e.key === "MediaPlayPause") {
+          // Play/Pause
+          if (!video.paused) {
+            video.pause();
+          } else {
+            video.play();
+          }
+          e.preventDefault();
+        }
+        if (e.key === "Escape" || e.key === "Backspace" || e.key === "SoftLeft" || e.key === "SoftRight" || e.key === "Back") {
+          closeSongPlayer();
+          e.preventDefault();
+        }
+        return;
+      }
+      // Song selection part
       if (e.key >= "0" && e.key <= "9") {
         if (numbers.length < 5) {
           numbers.push(e.key);
@@ -244,11 +182,21 @@
         updateDisplay();
         e.preventDefault();
       }
+      if ((e.key === "Enter" || e.key === "OK") && songLoaded) {
+        // Only play if all 5 digits match
+        if (numbers.length === 5) {
+          const numStr = numbers.join('');
+          if (numStr === songNumber && songLink) {
+            playSong(songLink, songTitle);
+          }
+        }
+        e.preventDefault();
+      }
     });
+
     document.body.addEventListener("touchend", focusBody);
     document.body.addEventListener("click", focusBody);
 
-    // Optional: Display mobile numpad for touch devices (input hidden offscreen, only shows numpad)
     function createNumpadInput() {
       const input = document.createElement('input');
       input.type = 'tel';
@@ -272,22 +220,58 @@
       return input;
     }
     function isTouchDevice() {
-      return (('ontouchstart' in window) ||
-        (navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints > 0));
+      return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
     }
     let numpadInput = null;
     if (isTouchDevice()) {
       numpadInput = createNumpadInput();
-      document.body.addEventListener('touchend', () => {
-        numpadInput.focus();
-      });
-      document.body.addEventListener('click', () => {
-        numpadInput.focus();
-      });
+      document.body.addEventListener('touchend', () => { numpadInput.focus(); });
+      document.body.addEventListener('click', () => { numpadInput.focus(); });
     }
 
     updateDisplay();
+
+    function playSong(mp4link, title) {
+      if (!mp4link) return;
+      const overlay = document.getElementById('songPlayerOverlay');
+      const video = document.getElementById('songPlayerVideo');
+      overlay.style.display = "flex";
+      video.src = mp4link;
+      video.setAttribute("title", title);
+      setTimeout(() => {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        }
+      }, 100);
+      video.play();
+      video.blur(); // remove focus, so keyboard events go to document
+    }
+    function closeSongPlayer() {
+      const overlay = document.getElementById('songPlayerOverlay');
+      const video = document.getElementById('songPlayerVideo');
+      video.pause();
+      video.src = "";
+      overlay.style.display = "none";
+      // Exit fullscreen if open
+      if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+      focusBody();
+    }
+    document.getElementById('closeSongPlayer').onclick = closeSongPlayer;
+    document.getElementById('songPlayerOverlay').addEventListener('mousedown', function(e){
+      if (e.target === this) closeSongPlayer();
+    });
   </script>
 </body>
 </html>
