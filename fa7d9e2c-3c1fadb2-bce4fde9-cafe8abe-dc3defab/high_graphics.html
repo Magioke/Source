@@ -4,200 +4,162 @@
   <meta charset="UTF-8">
   <title>Magioke Karaoke</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link rel="icon" type="image/png" href="https://magioke.github.io/Source/LOGO/icon_2.png">
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: black;
-      touch-action: manipulation;
-      /* Prevent double-tap zoom and highlight on TV remotes */
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    body {
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .video-bg {
+    html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; background: black; touch-action: manipulation; -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; }
+    body { width: 100vw; height: 100vh; overflow: hidden; }
+    .bg-video {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
-      z-index: 1;
       object-fit: cover;
+      min-width: 100vw;
+      min-height: 100vh;
+      z-index: 1;
       pointer-events: none;
       background: black;
     }
-    .overlay {
-      z-index: 2;
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      pointer-events: none;
-      padding-top: 13vh;
-    }
-    .select-text {
-      color: #fff;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 6vw;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 4vw;
-      text-shadow:
-        -3px -3px 0 #000,
-         3px -3px 0 #000,
-        -3px  3px 0 #000,
-         3px  3px 0 #000,
-         0px  3px 0 #000,
-         3px  0px 0 #000,
-         0px -3px 0 #000,
-        -3px  0px 0 #000;
-      letter-spacing: 4px;
-      animation: selectFlash 1.2s steps(1, start) infinite;
-      /* Prevent text selection */
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    @keyframes selectFlash {
-      0%   { opacity: 1; }
-      39%  { opacity: 1; }
-      40%  { opacity: 0; }
-      89%  { opacity: 0; }
-      90%  { opacity: 1; }
-      100% { opacity: 1; }
-    }
-    .logo-img {
-      width: 15vw;
-      max-width: 180px;
-      min-width: 70px;
-      height: auto;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      filter: drop-shadow(0 4px 16px rgba(0,0,0,0.7));
-      pointer-events: auto;
-      margin-bottom: 6vw;
-      margin-top: 2vw;
-      /* Prevent drag */
-      -webkit-user-drag: none;
-      user-drag: none;
-    }
-    .number-entry {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 5vw;
-      color: #fff;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 3vw;
-      letter-spacing: 0.35vw;
-      text-shadow:
-        -3px -3px 0 #000,
-         3px -3px 0 #000,
-        -3px  3px 0 #000,
-         3px  3px 0 #000,
-         0px  3px 0 #000,
-         3px  0px 0 #000,
-         0px -3px 0 #000,
-        -3px  0px 0 #000;
-      pointer-events: auto;
-      min-width: 14vw;
-      min-height: 2em;
-      background: none;
-      border: none;
-      box-shadow: none;
-      outline: none;
-      padding: 0;
-      -webkit-user-select: none;
-      user-select: none;
-      /* Large tap/click area for touch/TV */
-      touch-action: manipulation;
-    }
-    /* Make sure everything scales for TV and phone */
-    @media (max-width: 900px) {
-      .select-text {
-        font-size: 10vw;
-        letter-spacing: 2px;
-        margin-bottom: 8vw;
-      }
-      .logo-img {
-        width: 30vw;
-        min-width: 50px;
-        margin-bottom: 10vw;
-        margin-top: 4vw;
-      }
-      .number-entry {
-        font-size: 10vw;
-        min-width: 30vw;
-        margin-top: 4vw;
-        letter-spacing: 0.6vw;
-      }
-      .overlay {
-        padding-top: 8vh;
-      }
-    }
-
-    /* Hide scrollbars on TV browsers if present */
-    ::-webkit-scrollbar {
-      width: 0 !important;
-      background: transparent !important;
-    }
-    body {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
+    .overlay { z-index: 3; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; pointer-events: none; padding-top: 13vh; }
+    .select-text { color: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 6vw; font-weight: bold; text-align: center; margin-bottom: 4vw; text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0px 3px 0 #000, 3px 0px 0 #000, 0px -3px 0 #000, -3px 0px 0 #000; letter-spacing: 4px; animation: selectFlash 1.2s steps(1, start) infinite; user-select: none; min-height: 1.5em; }
+    @keyframes selectFlash { 0% { opacity: 1; } 39% { opacity: 1; } 40% { opacity: 0; } 89% { opacity: 0; } 90% { opacity: 1; } 100% { opacity: 1; } }
+    .logo-img { width: 15vw; max-width: 180px; min-width: 70px; height: auto; display: block; margin-left: auto; margin-right: auto; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.7)); pointer-events: auto; margin-bottom: 6vw; margin-top: 2vw; -webkit-user-drag: none; user-drag: none; cursor: pointer; }
+    .number-entry { font-family: Arial, Helvetica, sans-serif; font-size: 5vw; color: #fff; font-weight: bold; text-align: center; margin-top: 3vw; letter-spacing: 0.35vw; text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0px 3px 0 #000, 3px 0px 0 #000, 0px -3px 0 #000, -3px 0px 0 #000; pointer-events: auto; min-width: 14vw; min-height: 2em; background: none; border: none; box-shadow: none; outline: none; padding: 0; user-select: none; touch-action: manipulation; }
+    @media (max-width: 900px) { .select-text { font-size: 10vw; letter-spacing: 2px; margin-bottom: 8vw; } .logo-img { width: 30vw; min-width: 50px; margin-bottom: 10vw; margin-top: 4vw; } .number-entry { font-size: 10vw; min-width: 30vw; margin-top: 4vw; letter-spacing: 0.6vw; } .overlay { padding-top: 8vh; } }
+    ::-webkit-scrollbar { width: 0 !important; background: transparent !important; }
+    body { scrollbar-width: none; -ms-overflow-style: none; }
+    #songPlayerOverlay { position: fixed; z-index: 1000; top: 0; left: 0; width: 100vw; height: 100vh; background: #000c; display: none; align-items: center; justify-content: center; }
+    #songPlayerOverlay video { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; object-fit: contain; border-radius: 0; background: #000; outline: none; }
+    #songPlayerOverlay .close-btn { position: absolute; top: 3vw; right: 5vw; font-size: 3vw; color: #fff; background: #000a; border: none; border-radius: 50%; width: 4vw; height: 4vw; min-width: 35px; min-height: 35px; cursor: pointer; z-index: 2; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    #songPlayerOverlay .close-btn:hover { background: #222; }
+    #songPlayerVideo::-webkit-media-controls { display:none !important; }
+    #songPlayerVideo::-webkit-media-controls-panel { display: none !important; }
+    #songPlayerVideo::-webkit-media-controls-play-button,
+    #songPlayerVideo::-webkit-media-controls-pause-button,
+    #songPlayerVideo::-webkit-media-controls-timeline,
+    #songPlayerVideo::-webkit-media-controls-current-time-display,
+    #songPlayerVideo::-webkit-media-controls-time-remaining-display,
+    #songPlayerVideo::-webkit-media-controls-seek-back-button,
+    #songPlayerVideo::-webkit-media-controls-seek-forward-button,
+    #songPlayerVideo::-webkit-media-controls-mute-button,
+    #songPlayerVideo::-webkit-media-controls-volume-slider { display: none !important; }
+    #songPlayerVideo::-moz-media-controls { display: none !important; }
+    #songPlayerVideo::-ms-media-controls { display: none !important; }
   </style>
 </head>
 <body tabindex="0">
-  <video 
-    class="video-bg" 
-    src="https://magioke.github.io/Source/BACKGROUND/Magioke_video_1.mp4" 
-    autoplay 
-    loop 
-    muted
-    playsinline>
+  <!-- VIDEO BACKGROUND -->
+  <video class="bg-video" autoplay loop muted playsinline>
+    <source src="https://magioke.github.io/Source/BACKGROUND/Magioke_video_1.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
+
   <div class="overlay">
-    <div class="select-text">SELECT A SONG</div>
-    <img class="logo-img" src="https://magioke.github.io/Source/LOGO/icon_1.png" alt="Magioke Logo" draggable="false">
+    <div class="select-text" id="select-text">SELECT A SONG</div>
+    <img class="logo-img" id="logo-img" src="https://magioke.github.io/Source/LOGO/icon_1.png" alt="Magioke Logo" draggable="false">
     <div class="number-entry" id="number-entry">&nbsp;</div>
   </div>
+  <div id="songPlayerOverlay">
+    <button class="close-btn" id="closeSongPlayer" title="Close">&times;</button>
+    <video id="songPlayerVideo" tabindex="0" autoplay playsinline></video>
+    <div id="videoInstructions" style="position:absolute;left:0;right:0;bottom:7vh;text-align:center;color:#fff;font-family:sans-serif;font-size:2vw;z-index:5;pointer-events:none;">
+      <span>Press <b>OK</b>/<b>Enter</b> to Play/Pause. Press <b>Esc</b>, <b>Back</b>, or <b>Down</b> to Exit.<br>Click anywhere to Play/Pause.</span>
+    </div>
+  </div>
   <script>
-    // Focus for keyboard input on TV/PC, but don't interfere with TV remotes
     function focusBody() {
-      // Many TV browsers don't support .focus(), but this is safe for those that do
       try { document.body.focus(); } catch(e) {}
     }
     focusBody();
 
+    // Song data
+    let songNumber = "", songTitle = "", songLink = "";
     let numbers = [];
-    // Preload SFX for best TV/phone compatibility
+    let songLoaded = false;
+
+    // Fetch and parse the song
+    fetch('https://magioke.github.io/Source/fa7d9e2c-3c1fadb2-bce4fde9-cafe8abe-dc3defab/bundles/list.json')
+      .then(r => r.json())
+      .then(obj => {
+        if (obj.song) {
+          const match = obj.song.match(/^(\d{5})\s*-\s*(.*?)\s*-\s*(https?:\/\/\S+)$/);
+          if (match) {
+            songNumber = match[1];
+            songTitle = match[2];
+            songLink = match[3];
+            songLoaded = true;
+          }
+        }
+      });
+
+    // SFX
     const sfxAudio = {};
     for (let i = 0; i <= 9; i++) {
       sfxAudio[i] = new Audio(`https://magioke.github.io/Source/sfx/${i}_magioke.mp3`);
-      // Allow overlapping playbacks
       sfxAudio[i].load();
     }
     function playNumberSFX(num) {
       if (num >= 0 && num <= 9 && sfxAudio[num]) {
         try {
-          // Clone to allow overlapping playbacks, since many TV browsers require this
           const snd = sfxAudio[num].cloneNode();
           snd.play();
         } catch(e){}
       }
     }
+
     function updateDisplay() {
       const display = document.getElementById("number-entry");
       display.textContent = numbers.length ? numbers.join('') : '\u00A0';
+      const selectText = document.getElementById("select-text");
+      if (numbers.length === 5 && songLoaded) {
+        const numStr = numbers.join('');
+        if (numStr === songNumber) {
+          selectText.textContent = songTitle;
+        } else {
+          selectText.textContent = "SONG NOT FOUND";
+        }
+      } else {
+        selectText.textContent = "SELECT A SONG";
+      }
     }
-    // Handle remote/keypad/keyboard for TV/phones
+
+    // Allow logo click to play selected song if it matches
+    document.getElementById('logo-img').addEventListener('click', function() {
+      if (numbers.length === 5 && songLoaded) {
+        const numStr = numbers.join('');
+        if (numStr === songNumber && songLink) {
+          playSong(songLink, songTitle);
+        }
+      }
+    });
+
     document.addEventListener("keydown", (e) => {
       if (/^(INPUT|TEXTAREA)$/i.test(document.activeElement.tagName)) return;
+      const playerOverlay = document.getElementById('songPlayerOverlay');
+      const video = document.getElementById('songPlayerVideo');
+      if (playerOverlay.style.display === "flex") {
+        // Video overlay controls by keyboard/remote
+        if (e.key === "Enter" || e.key === "OK") {
+          if (!video.paused) {
+            video.pause();
+          } else {
+            video.play();
+          }
+          e.preventDefault();
+        }
+        // ESC, Back, Down Arrow all close player
+        if (
+          e.key === "Escape" ||
+          e.key === "Backspace" ||
+          e.key === "SoftLeft" ||
+          e.key === "SoftRight" ||
+          e.key === "Back" ||
+          e.key === "ArrowDown"
+        ) {
+          closeSongPlayer();
+          e.preventDefault();
+        }
+        return;
+      }
+      // Song selection part
       if (e.key >= "0" && e.key <= "9") {
         if (numbers.length < 5) {
           numbers.push(e.key);
@@ -214,14 +176,20 @@
         updateDisplay();
         e.preventDefault();
       }
-      // OK/Enter on remote doesn't do anything
+      if ((e.key === "Enter" || e.key === "OK") && songLoaded) {
+        if (numbers.length === 5) {
+          const numStr = numbers.join('');
+          if (numStr === songNumber && songLink) {
+            playSong(songLink, songTitle);
+          }
+        }
+        e.preventDefault();
+      }
     });
-    // Touch/click to focus and optionally bring up virtual numpad on phones
+
     document.body.addEventListener("touchend", focusBody);
     document.body.addEventListener("click", focusBody);
 
-    // Optional: Display mobile numpad for touch devices (input hidden offscreen, only shows numpad)
-    // This helps on phones, but is ignored by most TVs
     function createNumpadInput() {
       const input = document.createElement('input');
       input.type = 'tel';
@@ -236,35 +204,93 @@
       input.tabIndex = -1;
       document.body.appendChild(input);
       input.addEventListener('input', () => {
-        // Only keep last 5 digits, filter non-numbers
         let val = input.value.replace(/\D/g, '').slice(-5);
         numbers = val.split('');
         updateDisplay();
-        // play SFX for the last digit typed
         if (val.length) playNumberSFX(val[val.length - 1]);
-        // Clear the field for next input
         input.value = '';
       });
       return input;
     }
-    // Only show numpad on touch devices (not TVs)
-    let numpadInput = null;
     function isTouchDevice() {
-      return (('ontouchstart' in window) ||
-        (navigator.maxTouchPoints > 0) ||
-        (navigator.msMaxTouchPoints > 0));
+      return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
     }
+    let numpadInput = null;
     if (isTouchDevice()) {
       numpadInput = createNumpadInput();
-      document.body.addEventListener('touchend', () => {
-        numpadInput.focus();
-      });
-      document.body.addEventListener('click', () => {
-        numpadInput.focus();
-      });
+      document.body.addEventListener('touchend', () => { numpadInput.focus(); });
+      document.body.addEventListener('click', () => { numpadInput.focus(); });
     }
 
     updateDisplay();
+
+    function playSong(mp4link, title) {
+      if (!mp4link) return;
+      const overlay = document.getElementById('songPlayerOverlay');
+      const video = document.getElementById('songPlayerVideo');
+      overlay.style.display = "flex";
+      video.src = mp4link;
+      video.setAttribute("title", title);
+      setTimeout(() => {
+        if (video.requestFullscreen) {
+          video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) {
+          video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) {
+          video.msRequestFullscreen();
+        }
+      }, 100);
+      video.play();
+      video.blur(); // remove focus, so keyboard events go to document
+
+      // Robust click-to-toggle (play/pause) handler for overlay
+      const overlayElem = document.getElementById('songPlayerOverlay');
+      function overlayClickToggle(e) {
+        // Prevent closing if clicking the close button
+        if (e.target === document.getElementById('closeSongPlayer')) return;
+        // Only toggle if overlay is visible and video is loaded
+        if (overlayElem.style.display === "flex" && video.src) {
+          if (video.paused) video.play();
+          else video.pause();
+          e.preventDefault();
+        }
+      }
+      overlayElem.addEventListener('mousedown', overlayClickToggle);
+
+      // Remove handler on close
+      video._removeOverlayClick = function() {
+        overlayElem.removeEventListener('mousedown', overlayClickToggle);
+      }
+    }
+
+    function closeSongPlayer() {
+      const overlay = document.getElementById('songPlayerOverlay');
+      const video = document.getElementById('songPlayerVideo');
+      video.pause();
+      video.src = "";
+      overlay.style.display = "none";
+      // Exit fullscreen if open
+      if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      }
+      if (typeof video._removeOverlayClick === "function") video._removeOverlayClick();
+      focusBody();
+    }
+    document.getElementById('closeSongPlayer').onclick = closeSongPlayer;
+    document.getElementById('songPlayerOverlay').addEventListener('mousedown', function(e){
+      if (e.target === this) closeSongPlayer();
+    });
+
+    // Auto-close video and return to main screen when finished
+    document.getElementById('songPlayerVideo').addEventListener('ended', function(){
+      closeSongPlayer();
+    });
   </script>
 </body>
 </html>
