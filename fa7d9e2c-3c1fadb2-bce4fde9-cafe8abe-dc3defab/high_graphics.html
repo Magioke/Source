@@ -12,6 +12,7 @@
       overflow: hidden;
       background: black;
       touch-action: manipulation;
+      /* Prevent double-tap zoom and highlight on TV remotes */
       -webkit-tap-highlight-color: transparent;
       -webkit-user-select: none;
       user-select: none;
@@ -58,6 +59,7 @@
         -3px  0px 0 #000;
       letter-spacing: 4px;
       animation: selectFlash 1.2s steps(1, start) infinite;
+      /* Prevent text selection */
       -webkit-user-select: none;
       user-select: none;
     }
@@ -81,6 +83,7 @@
       pointer-events: auto;
       margin-bottom: 6vw;
       margin-top: 2vw;
+      /* Prevent drag */
       -webkit-user-drag: none;
       user-drag: none;
     }
@@ -111,8 +114,10 @@
       padding: 0;
       -webkit-user-select: none;
       user-select: none;
+      /* Large tap/click area for touch/TV */
       touch-action: manipulation;
     }
+    /* Make sure everything scales for TV and phone */
     @media (max-width: 900px) {
       .select-text {
         font-size: 10vw;
@@ -135,6 +140,8 @@
         padding-top: 8vh;
       }
     }
+
+    /* Hide scrollbars on TV browsers if present */
     ::-webkit-scrollbar {
       width: 0 !important;
       background: transparent !important;
@@ -152,8 +159,7 @@
     autoplay 
     loop 
     muted
-    playsinline
-    poster="https://magioke.github.io/Source/LOGO/icon_1.png">
+    playsinline>
   </video>
   <div class="overlay">
     <div class="select-text">SELECT A SONG</div>
@@ -161,7 +167,9 @@
     <div class="number-entry" id="number-entry">&nbsp;</div>
   </div>
   <script>
+    // Focus for keyboard input on TV/PC, but don't interfere with TV remotes
     function focusBody() {
+      // Many TV browsers don't support .focus(), but this is safe for those that do
       try { document.body.focus(); } catch(e) {}
     }
     focusBody();
@@ -171,11 +179,13 @@
     const sfxAudio = {};
     for (let i = 0; i <= 9; i++) {
       sfxAudio[i] = new Audio(`https://magioke.github.io/Source/sfx/${i}_magioke.mp3`);
+      // Allow overlapping playbacks
       sfxAudio[i].load();
     }
     function playNumberSFX(num) {
       if (num >= 0 && num <= 9 && sfxAudio[num]) {
         try {
+          // Clone to allow overlapping playbacks, since many TV browsers require this
           const snd = sfxAudio[num].cloneNode();
           snd.play();
         } catch(e){}
@@ -185,6 +195,7 @@
       const display = document.getElementById("number-entry");
       display.textContent = numbers.length ? numbers.join('') : '\u00A0';
     }
+    // Handle remote/keypad/keyboard for TV/phones
     document.addEventListener("keydown", (e) => {
       if (/^(INPUT|TEXTAREA)$/i.test(document.activeElement.tagName)) return;
       if (e.key >= "0" && e.key <= "9") {
@@ -203,11 +214,14 @@
         updateDisplay();
         e.preventDefault();
       }
+      // OK/Enter on remote doesn't do anything
     });
+    // Touch/click to focus and optionally bring up virtual numpad on phones
     document.body.addEventListener("touchend", focusBody);
     document.body.addEventListener("click", focusBody);
 
-    // Optional: show mobile numpad for touch devices
+    // Optional: Display mobile numpad for touch devices (input hidden offscreen, only shows numpad)
+    // This helps on phones, but is ignored by most TVs
     function createNumpadInput() {
       const input = document.createElement('input');
       input.type = 'tel';
@@ -222,20 +236,24 @@
       input.tabIndex = -1;
       document.body.appendChild(input);
       input.addEventListener('input', () => {
+        // Only keep last 5 digits, filter non-numbers
         let val = input.value.replace(/\D/g, '').slice(-5);
         numbers = val.split('');
         updateDisplay();
+        // play SFX for the last digit typed
         if (val.length) playNumberSFX(val[val.length - 1]);
+        // Clear the field for next input
         input.value = '';
       });
       return input;
     }
+    // Only show numpad on touch devices (not TVs)
+    let numpadInput = null;
     function isTouchDevice() {
       return (('ontouchstart' in window) ||
         (navigator.maxTouchPoints > 0) ||
         (navigator.msMaxTouchPoints > 0));
     }
-    let numpadInput = null;
     if (isTouchDevice()) {
       numpadInput = createNumpadInput();
       document.body.addEventListener('touchend', () => {
@@ -247,19 +265,6 @@
     }
 
     updateDisplay();
-
-    // Video playback workaround for TVs
-    function playBgVideo() {
-      var video = document.querySelector('.video-bg');
-      if (video && video.paused) {
-        video.muted = true;
-        video.play().catch(()=>{});
-      }
-    }
-    document.body.addEventListener("click", playBgVideo);
-    document.body.addEventListener("touchstart", playBgVideo);
-    document.body.addEventListener("keydown", playBgVideo);
-    setTimeout(playBgVideo, 1500);
   </script>
 </body>
 </html>
