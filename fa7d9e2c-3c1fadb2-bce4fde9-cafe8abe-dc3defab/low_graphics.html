@@ -14,7 +14,7 @@
     .overlay { z-index: 3; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; pointer-events: none; padding-top: 13vh; }
     .select-text { color: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 6vw; font-weight: bold; text-align: center; margin-bottom: 4vw; text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0px 3px 0 #000, 3px 0px 0 #000, 0px -3px 0 #000, -3px 0px 0 #000; letter-spacing: 4px; animation: selectFlash 1.2s steps(1, start) infinite; user-select: none; min-height: 1.5em; }
     @keyframes selectFlash { 0% { opacity: 1; } 39% { opacity: 1; } 40% { opacity: 0; } 89% { opacity: 0; } 90% { opacity: 1; } 100% { opacity: 1; } }
-    .logo-img { width: 15vw; max-width: 180px; min-width: 70px; height: auto; display: block; margin-left: auto; margin-right: auto; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.7)); pointer-events: auto; margin-bottom: 6vw; margin-top: 2vw; -webkit-user-drag: none; user-drag: none; }
+    .logo-img { width: 15vw; max-width: 180px; min-width: 70px; height: auto; display: block; margin-left: auto; margin-right: auto; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.7)); pointer-events: auto; margin-bottom: 6vw; margin-top: 2vw; -webkit-user-drag: none; user-drag: none; cursor: pointer; }
     .number-entry { font-family: Arial, Helvetica, sans-serif; font-size: 5vw; color: #fff; font-weight: bold; text-align: center; margin-top: 3vw; letter-spacing: 0.35vw; text-shadow: -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000, 3px 3px 0 #000, 0px 3px 0 #000, 3px 0px 0 #000, 0px -3px 0 #000, -3px 0px 0 #000; pointer-events: auto; min-width: 14vw; min-height: 2em; background: none; border: none; box-shadow: none; outline: none; padding: 0; user-select: none; touch-action: manipulation; }
     @media (max-width: 900px) { .select-text { font-size: 10vw; letter-spacing: 2px; margin-bottom: 8vw; } .logo-img { width: 30vw; min-width: 50px; margin-bottom: 10vw; margin-top: 4vw; } .number-entry { font-size: 10vw; min-width: 30vw; margin-top: 4vw; letter-spacing: 0.6vw; } .overlay { padding-top: 8vh; } }
     ::-webkit-scrollbar { width: 0 !important; background: transparent !important; }
@@ -43,14 +43,14 @@
   <img class="slideshow-bg inactive" id="slideshow-bg-2" src="https://magioke.github.io/Source/BACKGROUND/Magioke_2.jpg" alt="Background slideshow 2">
   <div class="overlay">
     <div class="select-text" id="select-text">SELECT A SONG</div>
-    <img class="logo-img" src="https://magioke.github.io/Source/LOGO/icon_1.png" alt="Magioke Logo" draggable="false">
+    <img class="logo-img" id="logo-img" src="https://magioke.github.io/Source/LOGO/icon_1.png" alt="Magioke Logo" draggable="false">
     <div class="number-entry" id="number-entry">&nbsp;</div>
   </div>
   <div id="songPlayerOverlay">
     <button class="close-btn" id="closeSongPlayer" title="Close">&times;</button>
     <video id="songPlayerVideo" tabindex="0" autoplay playsinline></video>
     <div id="videoInstructions" style="position:absolute;left:0;right:0;bottom:7vh;text-align:center;color:#fff;font-family:sans-serif;font-size:2vw;z-index:5;pointer-events:none;">
-      <span>Press <b>OK</b>/<b>Enter</b> to Play/Pause. Press <b>Esc</b> or <b>Back</b> to Exit.</span>
+      <span>Press <b>OK</b>/<b>Enter</b> to Play/Pause. Press <b>Esc</b> or <b>Back</b> to Exit. <br>Click anywhere to Play/Pause.</span>
     </div>
   </div>
   <script>
@@ -137,6 +137,16 @@
         selectText.textContent = "SELECT A SONG";
       }
     }
+
+    // Allow logo click to play selected song if it matches
+    document.getElementById('logo-img').addEventListener('click', function() {
+      if (numbers.length === 5 && songLoaded) {
+        const numStr = numbers.join('');
+        if (numStr === songNumber && songLink) {
+          playSong(songLink, songTitle);
+        }
+      }
+    });
 
     document.addEventListener("keydown", (e) => {
       if (/^(INPUT|TEXTAREA)$/i.test(document.activeElement.tagName)) return;
@@ -241,7 +251,27 @@
       }, 100);
       video.play();
       video.blur(); // remove focus, so keyboard events go to document
+
+      // Robust click-to-toggle (play/pause) handler for overlay
+      const overlayElem = document.getElementById('songPlayerOverlay');
+      function overlayClickToggle(e) {
+        // Prevent closing if clicking the close button
+        if (e.target === document.getElementById('closeSongPlayer')) return;
+        // Only toggle if overlay is visible and video is loaded
+        if (overlayElem.style.display === "flex" && video.src) {
+          if (video.paused) video.play();cccccccc
+          else video.pause();
+          e.preventDefault();
+        }
+      }
+      overlayElem.addEventListener('mousedown', overlayClickToggle);
+
+      // Remove handler on close
+      video._removeOverlayClick = function() {
+        overlayElem.removeEventListener('mousedown', overlayClickToggle);
+      }
     }
+
     function closeSongPlayer() {
       const overlay = document.getElementById('songPlayerOverlay');
       const video = document.getElementById('songPlayerVideo');
@@ -258,6 +288,7 @@
           document.msExitFullscreen();
         }
       }
+      if (typeof video._removeOverlayClick === "function") video._removeOverlayClick();
       focusBody();
     }
     document.getElementById('closeSongPlayer').onclick = closeSongPlayer;
